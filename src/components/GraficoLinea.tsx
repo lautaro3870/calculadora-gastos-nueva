@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
-import getLocalItems from "../funciones/GetLocalItems";
+import { getLocalItems } from "../funciones/GetLocalItems";
 
 ChartJS.register(
   TimeScale,

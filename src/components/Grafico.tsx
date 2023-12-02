@@ -9,7 +9,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import getLocalItems from "../funciones/GetLocalItems";
+import {getLocalItems} from "../funciones/GetLocalItems";
 
 ChartJS.register(
   CategoryScale,

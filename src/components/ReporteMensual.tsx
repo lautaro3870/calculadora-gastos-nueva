@@ -1,55 +1,50 @@
 import { Box, Stack, Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import React, { useState, useEffect, SetStateAction } from "react";
-import getLocalItems from "../funciones/GetLocalItems";
+import { useState, useEffect } from "react";
+import { getLocalItems, getReporteMensual } from "../funciones/GetLocalItems";
 import Swal from "sweetalert2";
 import DeleteIcon from "@mui/icons-material/Delete";
+import categorias from "../Categorias";
 
-const getReporteMensual = () => {
-  let list = localStorage.getItem("reporteMensual");
-  if (list === null) {
-    return [];
-  }
+const getColumns = () => {
+  let columna = {};
+  const columns: any = [];
 
-  if (list) {
-    return JSON.parse(localStorage.getItem("reporteMensual") ?? "");
-  }
+  categorias.forEach((categoria) => {
+    Object.defineProperty(columna, "field", {value: categoria});
+    Object.defineProperty(columna, "headerName", {value: categoria});
+    Object.defineProperty(columna, "width", {value: 120});
+    columns.push(columna);
+    columna = {};
+  });
+  return columns;
 };
 
 export default function ReporteMensual() {
   const [listado, setListado] = useState(getLocalItems());
   const [datos, setDatos] = useState<any[]>(getReporteMensual());
 
-  const columns: GridColDef[] = [
-    { field: "Super", headerName: "Super", width: 140 },
-    { field: "Bar", headerName: "Bar", width: 140 },
-    { field: "Metro", headerName: "Metro", width: 140 },
-    { field: "Boludeces", headerName: "Boludeces", width: 140 },
-    { field: "Bondi", headerName: "Bondi", width: 120 },
-    { field: "Ropa", headerName: "Bondi", width: 120 },
-    { field: "Cafe", headerName: "Bondi", width: 120 },
-    { field: "Otros", headerName: "Otros", width: 120 },
-    { field: "mes", headerName: "Mes", width: 150 },
-    { field: "total", headerName: "Total", width: 150 },
-    {
-      field: "actions",
-      headerName: "Actions",
-      renderCell: (params) => {
-        const onClick = () => {
-          const id = params.api.getCellValue(params.id, "id");
-          //const listado = JSON.parse(localStorage.getItem("gastos") ?? "");
-          const nuevoArrelgo = datos.filter((i: any) => i.id !== id);
-          console.log(nuevoArrelgo);
-          setDatos(nuevoArrelgo);
-        };
-        return (
-          <Button onClick={onClick} variant="outlined" color="error">
-            <DeleteIcon />
-          </Button>
-        );
-      },
+  const columnas = getColumns();
+
+  const columns: GridColDef[] = [];
+  columns.push(...columnas);
+  columns.push({
+    field: "actions",
+    headerName: "Actions",
+    renderCell: (params) => {
+      const onClick = () => {
+        const id = params.api.getCellValue(params.id, "id");
+        const nuevoArrelgo = datos.filter((i: any) => i.id !== id);
+        setDatos(nuevoArrelgo);
+      };
+      return (
+        <Button onClick={onClick} variant="outlined" color="error">
+          <DeleteIcon />
+        </Button>
+      );
     },
-  ];
+  });
+  
 
   function obtenerNombreMes(indiceMes: any) {
     const meses = [
@@ -100,10 +95,8 @@ export default function ReporteMensual() {
           categoria: categoria,
         };
         sumasPorCategoria.push(objetoRetorno);
-        //sumasPorCategoria[categoria] = sumaCategoria;
       }
     }
-
     return sumasPorCategoria;
   }
 
@@ -153,22 +146,16 @@ export default function ReporteMensual() {
       };
       for (const key in sumasGastosPorCategoria) {
         const valor = sumasGastosPorCategoria[key];
-        
         objetoDestino[valor.categoria] += valor.valor;
       }
-      if (listadoFinal !== null){
+      if (listadoFinal !== null) {
         listadoFinal.push(objetoDestino);
         setDatos(listadoFinal);
       }
-
-      console.log(datos);
-
-      //return objetoDestino;
     }
   };
 
   useEffect(() => {
-    console.log(datos);
     localStorage.setItem("reporteMensual", JSON.stringify(datos));
   }, [datos]);
 
@@ -186,14 +173,7 @@ export default function ReporteMensual() {
       >
         <button
           onClick={() => {
-            //reporte()
-            console.log(datos);
-            // let nueva: any[] = []
-            // const objeto = reporte();
-            // nueva.push(objeto)
-            // setDatos(nueva);
             reporte();
-            
             Swal.fire({
               icon: "success",
               title: "Guardado",

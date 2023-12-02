@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
-import getLocalItems from "../funciones/GetLocalItems";
+import { getLocalItems } from "../funciones/GetLocalItems";
 import { Form } from "react-bootstrap";
 import sumar from "../funciones/Sumar";
 import { Label } from "@mui/icons-material";
@@ -109,7 +109,7 @@ export default function CalculoReporte() {
           style={{ marginLeft: "10px" }}
           color="error"
           onClick={() => {
-            setListado(getLocalItems())
+            setListado(getLocalItems());
             setSubTotal(0);
           }}
         >

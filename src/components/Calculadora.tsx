@@ -26,7 +26,7 @@ import Swal from "sweetalert2";
 import { Box } from "@mui/system";
 import Barra from "./Barra";
 import DeleteIcon from "@mui/icons-material/Delete";
-import getLocalItems from "../funciones/GetLocalItems";
+import {getLocalItems} from "../funciones/GetLocalItems";
 import sumar from "../funciones/Sumar";
 import filtrar from "../funciones/Filtrar";
 import Rutas from "../Rutas";

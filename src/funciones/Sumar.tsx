@@ -1,14 +1,9 @@
-import getLocalItems from "./GetLocalItems";
-
 const sumar = (items: any): number => {
-    let suma = 0;
-    // const listado = getLocalItems();
-    // console.log(listado);
-    items.map((i: any) => {
-      suma = suma + i.gasto;
-    });
-    console.log(suma);
-    return suma
-}
+  let suma = 0;
+  items.map((i: any) => {
+    suma = suma + i.gasto;
+  });
+  return suma;
+};
 
 export default sumar;

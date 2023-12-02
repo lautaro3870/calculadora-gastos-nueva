@@ -1,4 +1,4 @@
-const getLocalItems = () => {
+export const getLocalItems = () => {
   let list = localStorage.getItem("gastos");
   if (list === null) {
     return [];
@@ -9,4 +9,12 @@ const getLocalItems = () => {
   }
 };
 
-export default getLocalItems;
+export const getReporteMensual = () => {
+  let list = localStorage.getItem("reporteMensual");
+  if (list === null) {
+    return [];
+  }
+  if (list) {
+    return JSON.parse(localStorage.getItem("reporteMensual") ?? "");
+  }
+};
