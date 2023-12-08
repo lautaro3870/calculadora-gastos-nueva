@@ -30,16 +30,6 @@ export default function CalculoReporte() {
     console.log(event.target.value);
     setMes(event.target.value);
     const valor = parseInt(event.target.value);
-    // const a = getLocalItems();
-
-    // const filteredList = a.filter((item: any) => {
-    //   const dateParts = item.fecha.split("/");
-    //   const month = parseInt(dateParts[1]);
-    //   return month === valor; // Filtra los elementos cuyo mes sea 7 (julio)
-    // });
-    // setListado(filteredList);
-    // const resultado = sumar(filteredList);
-    // setSubTotal(resultado);
   };
 
   const handleChangeCategorias = (event: SelectChangeEvent) => {

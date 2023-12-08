@@ -1,6 +1,5 @@
 import Swal from "sweetalert2";
 import {getLocalItems} from "./GetLocalItems";
-import categorias from "../Categorias";
 
 const filtrar = async () => {
   const listado = getLocalItems();

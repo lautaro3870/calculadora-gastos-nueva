@@ -1,48 +1,19 @@
-import { MutableRefObject, useRef, useState, useEffect } from "react";
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridSortModel,
-  GridTreeNodeWithRender,
-  GridValueGetterParams,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import {
   Button,
-  FormControl,
-  FormGroup,
-  Grid,
-  InputLabel,
   MenuItem,
   Paper,
   Select,
-  SelectChangeEvent,
   Stack,
   TextField,
   styled,
 } from "@mui/material";
-import { ChangeEvent } from "react";
 import Swal from "sweetalert2";
 import { Box } from "@mui/system";
-import Barra from "./Barra";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {getLocalItems} from "../funciones/GetLocalItems";
-import sumar from "../funciones/Sumar";
 import filtrar from "../funciones/Filtrar";
-import Rutas from "../Rutas";
 import categorias from "../Categorias";
-import { Col, Container, Row } from "react-bootstrap";
-
-const obtenerFecha = (): string => {
-  const today = new Date();
-  const day = String(today.getDate()).padStart(2, "0");
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const year = today.getFullYear();
-
-  const formattedDate = `${day}/${month}/${year}`;
-  console.log(formattedDate);
-  return formattedDate;
-};
+import { CalculadoraHook } from "../hooks/CalculadoraHook";
 
 const Item = styled(Paper)(({ theme }: any) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -52,18 +23,24 @@ const Item = styled(Paper)(({ theme }: any) => ({
   color: theme.palette.text.secondary,
 }));
 
-const totalGasto = localStorage.getItem("totalAGastar");
-
 export default function Calculadora() {
-  const [total, setTotal] = useState<number>(0);
-
-  const [totalAGastar, setTotalAGastar] = useState(parseInt(totalGasto ?? ""));
-  const [editing, setIsEditing] = useState(false);
-
-  const [gasto, setGasto] = useState<string>("");
-  const [categoria, setCategoria] = useState<string>("");
-
-  const [listado, setListado] = useState(getLocalItems());
+  const {
+    total,
+    setTotal,
+    totalAGastar,
+    editing,
+    gasto,
+    categoria,
+    listado,
+    setListado,
+    handleChange,
+    handleChangeGasto,
+    sortModel,
+    handleChangeTotal,
+    changeEditing,
+    handleChangeToFalse,
+    calcular
+  } = CalculadoraHook();
 
   const columns: GridColDef[] = [
     { field: "gasto", headerName: "Gasto", width: 120 },
@@ -75,7 +52,6 @@ export default function Calculadora() {
       renderCell: (params) => {
         const onClick = () => {
           const id = params.api.getCellValue(params.id, "id");
-          //const listado = JSON.parse(localStorage.getItem("gastos") ?? "");
           const nuevoArrelgo = listado.filter((i: any) => i.id !== id);
           console.log(nuevoArrelgo);
           setListado(nuevoArrelgo);
@@ -88,69 +64,6 @@ export default function Calculadora() {
       },
     },
   ];
-
-  const handleChange = (event: SelectChangeEvent) => {
-    console.log(event.target.value);
-    setCategoria(event.target.value);
-  };
-
-  const handleChangeGasto = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
-    setGasto(event.target.value);
-  };
-
-  useEffect(() => {
-    localStorage.setItem("gastos", JSON.stringify(listado));
-    const suma = sumar(listado);
-    setTotal(suma);
-  }, [listado]);
-
-  const calcular = () => {
-    //console.log(gasto + " " + categoria);
-    if (gasto === "" || categoria === "") {
-      Swal.fire({
-        icon: "error",
-        title: "Ingrese los valores",
-      });
-      return;
-    }
-    const objeto = {
-      id: Math.floor(Math.random() * 1000),
-      gasto: parseFloat(gasto),
-      categoria: categoria,
-      fecha: obtenerFecha(),
-    };
-
-    console.log(objeto);
-    setListado((oldList: any[]) => [...oldList, objeto]);
-    setGasto("");
-  };
-
-  const [sortModel, setSortModel] = useState<GridSortModel>([
-    {
-      field: "fecha",
-      sort: "desc",
-    },
-  ]);
-
-  const handleChangeTotal = (event: ChangeEvent<HTMLInputElement>) => {
-    const valor = event.target.value.toString();
-    if (valor === "") {
-      setTotalAGastar(0);
-      localStorage.setItem("totalAGastar", "0");
-    } else {
-      setTotalAGastar(parseInt(valor ?? ""));
-      localStorage.setItem("totalAGastar", valor);
-    }
-  };
-
-  const changeEditing = () => {
-    setIsEditing(true);
-  };
-
-  const handleChangeToFalse = () => {
-    setIsEditing(false);
-  };
 
   return (
     <div>
@@ -219,7 +132,6 @@ export default function Calculadora() {
             showCancelButton: true,
             denyButtonText: `Limpiar`,
           }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isDenied) {
               localStorage.setItem("gastos", JSON.stringify([]));
               setListado([]);
