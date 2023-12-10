@@ -1,10 +1,7 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import {
   Button,
-  MenuItem,
   Paper,
-  Select,
-  Stack,
   TextField,
   styled,
 } from "@mui/material";
@@ -14,14 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import filtrar from "../funciones/Filtrar";
 import categorias from "../Categorias";
 import { CalculadoraHook } from "../hooks/CalculadoraHook";
-
-const Item = styled(Paper)(({ theme }: any) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+import { Form } from "react-bootstrap";
 
 export default function Calculadora() {
   const {
@@ -39,7 +29,7 @@ export default function Calculadora() {
     handleChangeTotal,
     changeEditing,
     handleChangeToFalse,
-    calcular
+    calcular,
   } = CalculadoraHook();
 
   const columns: GridColDef[] = [
@@ -68,56 +58,46 @@ export default function Calculadora() {
   return (
     <div>
       <br />
-      <Stack
-        direction="row"
-        spacing={{ xs: 1, sm: 2, md: 4 }}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Item>
-          <TextField
-            type="number"
-            style={{ width: "120px" }}
-            size="small"
-            id="gasto"
-            label="Gasto"
-            value={gasto}
-            variant="outlined"
-            onChange={handleChangeGasto}
-          />
-        </Item>
-        <Item>
-          <Select
-            labelId="demo-simple-select-label"
-            id="selectCategoria"
-            label="Categorias"
-            size="small"
-            value={categoria}
-            onChange={handleChange}
-          >
-            {categorias.map((i) => {
-              return (
-                <MenuItem selected key={i} value={i}>
-                  {i}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </Item>
-        <Item>
-          <Button
-            onClick={calcular}
-            variant="contained"
-            size="medium"
-            style={{ marginLeft: "5px" }}
-          >
-            Ingresar
-          </Button>
-        </Item>
-      </Stack>
+      <div style={{
+        display: "flex",
+        flexDirection: "row",
+        gap: 20,
+        width: "100%",
+        justifyContent: "center"
+      }}>
+        <TextField
+          type="number"
+          style={{ width: "120px" }}
+          size="small"
+          id="gasto"
+          label="Gasto"
+          value={gasto}
+          variant="outlined"
+          onChange={handleChangeGasto}
+        />
+        <Form.Select
+          id="selectCategoria"
+          value={categoria}
+          onChange={handleChange}
+          style={{ width: "9rem" }}
+        >
+          {categorias.map((i) => {
+            return (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            );
+          })}
+        </Form.Select>
+        <Button
+          onClick={calcular}
+          variant="contained"
+          size="medium"
+          style={{ marginLeft: "5px" }}
+        >
+          Ingresar
+        </Button>
+      </div>
       <br />
       <Button
         variant="outlined"

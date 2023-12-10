@@ -27,7 +27,7 @@ export const CalculadoraHook = () => {
 
   const [listado, setListado] = useState(getLocalItems());
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event: any) => {
     console.log(event.target.value);
     setCategoria(event.target.value);
   };
