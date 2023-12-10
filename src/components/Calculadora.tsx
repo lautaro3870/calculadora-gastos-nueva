@@ -61,13 +61,13 @@ export default function Calculadora() {
       <div style={{
         display: "flex",
         flexDirection: "row",
-        gap: 20,
+        gap: 10,
         width: "100%",
         justifyContent: "center"
       }}>
         <TextField
           type="number"
-          style={{ width: "120px" }}
+          style={{ width: "7rem" }}
           size="small"
           id="gasto"
           label="Gasto"
@@ -79,7 +79,7 @@ export default function Calculadora() {
           id="selectCategoria"
           value={categoria}
           onChange={handleChange}
-          style={{ width: "9rem" }}
+          style={{ width: "7rem" }}
         >
           {categorias.map((i) => {
             return (
@@ -92,7 +92,7 @@ export default function Calculadora() {
         <Button
           onClick={calcular}
           variant="contained"
-          size="medium"
+          size="small"
           style={{ marginLeft: "5px" }}
         >
           Ingresar
