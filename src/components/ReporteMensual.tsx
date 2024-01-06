@@ -1,5 +1,5 @@
 import { Box, Stack, Button } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
 import { getLocalItems, getReporteMensual } from "../funciones/GetLocalItems";
 import Swal from "sweetalert2";
@@ -28,6 +28,13 @@ export default function ReporteMensual() {
 
   const columns: GridColDef[] = [];
   columns.push(...columnas);
+
+  columns.push({
+    field: "total",
+    headerName: "Total",
+    width: 120,
+  });
+
   columns.push({
     field: "actions",
     headerName: "Actions",
@@ -44,7 +51,7 @@ export default function ReporteMensual() {
       );
     },
   });
-  
+
 
   function obtenerNombreMes(indiceMes: any) {
     const meses = [
