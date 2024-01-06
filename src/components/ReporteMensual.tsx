@@ -11,11 +11,13 @@ const getColumns = () => {
   const columns: any = [];
 
   categorias.forEach((categoria) => {
-    Object.defineProperty(columna, "field", {value: categoria});
-    Object.defineProperty(columna, "headerName", {value: categoria});
-    Object.defineProperty(columna, "width", {value: 120});
-    columns.push(columna);
-    columna = {};
+    if (categoria !== "Seleccione") {
+      Object.defineProperty(columna, "field", { value: categoria });
+      Object.defineProperty(columna, "headerName", { value: categoria });
+      Object.defineProperty(columna, "width", { value: 120 });
+      columns.push(columna);
+      columna = {};
+    }
   });
   return columns;
 };
@@ -51,7 +53,6 @@ export default function ReporteMensual() {
       );
     },
   });
-
 
   function obtenerNombreMes(indiceMes: any) {
     const meses = [
