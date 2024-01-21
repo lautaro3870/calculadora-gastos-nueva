@@ -177,8 +177,12 @@ export default function ReporteMensual() {
 
   useEffect(() => {
     localStorage.setItem("reporteMensual", JSON.stringify(datos));
-    localStorage.setItem("gastoTotal", gastoTotal || "0");
   }, [datos]);
+  
+  useEffect(() => {
+    localStorage.setItem("gastoTotal", datos.length !== 0 ? datos[0].total : "0");
+    setGastoTotal(datos.length !== 0 ? datos[0].total : "0")
+  }, [])
 
   const obtenerGastosTotal = (gasto: number) => {
     const gastoAnterior = localStorage.getItem("gastoTotal");
