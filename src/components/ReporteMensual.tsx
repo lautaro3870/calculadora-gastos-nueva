@@ -25,6 +25,7 @@ const getColumns = () => {
 export default function ReporteMensual() {
   const [listado, setListado] = useState(getLocalItems());
   const [datos, setDatos] = useState<any[]>(getReporteMensual());
+  const [gastoTotal, setGastoTotal] = useState(localStorage.getItem("gastoTotal"));
 
   const columnas = getColumns();
 
@@ -32,9 +33,15 @@ export default function ReporteMensual() {
   columns.push(...columnas);
 
   columns.push({
+    field: "mes",
+    headerName: "Mes",
+    width: 120,
+  });
+
+  columns.push({
     field: "total",
     headerName: "Total",
-    width: 120,
+    width: 100,
   });
 
   columns.push({
@@ -43,8 +50,12 @@ export default function ReporteMensual() {
     renderCell: (params) => {
       const onClick = () => {
         const id = params.api.getCellValue(params.id, "id");
-        const nuevoArrelgo = datos.filter((i: any) => i.id !== id);
-        setDatos(nuevoArrelgo);
+        const nuevoArreglo = datos.filter((i: any) => i.id !== id);
+        const gastoTotal = nuevoArreglo.reduce((acc: any, obj: any) => {
+          return acc + parseInt(obj.total);
+        }, 0)
+        setGastoTotal(gastoTotal.toString());
+        setDatos(nuevoArreglo);
       };
       return (
         <Button onClick={onClick} variant="outlined" color="error">
@@ -54,7 +65,10 @@ export default function ReporteMensual() {
     },
   });
 
-  function obtenerNombreMes(indiceMes: any) {
+  function obtenerNombreMes(obj: any) {
+    const fechaString = obj.fecha;
+    const fecha = new Date(fechaString.split("/").reverse().join("/"));
+    const mes = fecha.getMonth();
     const meses = [
       "Enero",
       "Febrero",
@@ -69,7 +83,7 @@ export default function ReporteMensual() {
       "Noviembre",
       "Diciembre",
     ];
-    return meses[indiceMes];
+    return meses[mes];
   }
 
   function sumarGastos(objeto: any) {
@@ -111,10 +125,7 @@ export default function ReporteMensual() {
   const reporte = () => {
     let listadoFinal = JSON.parse(localStorage.getItem("reporteMensual") ?? "");
     const nuevo = listado.reduce((acc: any, obj: any) => {
-      const fechaString = obj.fecha;
-      const fecha = new Date(fechaString.split("/").reverse().join("/"));
-      const mes = fecha.getMonth();
-      const nombreMes = obtenerNombreMes(mes);
+      const nombreMes = obtenerNombreMes(obj);
 
       var key = nombreMes;
       if (!acc[key]) {
@@ -136,6 +147,7 @@ export default function ReporteMensual() {
       }, {});
 
       const sumaGastos = sumarGastos(final);
+      obtenerGastosTotal(sumaGastos);
       const sumasGastosPorCategoria = sumarGastosPorCategoria(final);
 
       const mes = key;
@@ -165,7 +177,14 @@ export default function ReporteMensual() {
 
   useEffect(() => {
     localStorage.setItem("reporteMensual", JSON.stringify(datos));
+    localStorage.setItem("gastoTotal", gastoTotal || "0");
   }, [datos]);
+
+  const obtenerGastosTotal = (gasto: number) => {
+    const gastoAnterior = localStorage.getItem("gastoTotal");
+    let suma = parseInt(gastoAnterior || "") + gasto;
+    setGastoTotal(suma.toString());
+  }
 
   return (
     <div>
@@ -192,6 +211,7 @@ export default function ReporteMensual() {
         >
           Guardar
         </button>
+        <label>Total: {gastoTotal}</label>
       </Stack>
       <Box>
         <br />
