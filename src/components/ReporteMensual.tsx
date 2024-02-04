@@ -25,7 +25,9 @@ const getColumns = () => {
 export default function ReporteMensual() {
   const [listado, setListado] = useState(getLocalItems());
   const [datos, setDatos] = useState<any[]>(getReporteMensual());
-  const [gastoTotal, setGastoTotal] = useState(localStorage.getItem("gastoTotal"));
+  const [gastoTotal, setGastoTotal] = useState(
+    localStorage.getItem("gastoTotal")
+  );
 
   const columnas = getColumns();
 
@@ -53,7 +55,7 @@ export default function ReporteMensual() {
         const nuevoArreglo = datos.filter((i: any) => i.id !== id);
         const gastoTotal = nuevoArreglo.reduce((acc: any, obj: any) => {
           return acc + parseInt(obj.total);
-        }, 0)
+        }, 0);
         setGastoTotal(gastoTotal.toString());
         setDatos(nuevoArreglo);
       };
@@ -147,7 +149,6 @@ export default function ReporteMensual() {
       }, {});
 
       const sumaGastos = sumarGastos(final);
-      obtenerGastosTotal(sumaGastos);
       const sumasGastosPorCategoria = sumarGastosPorCategoria(final);
 
       const mes = key;
@@ -178,17 +179,17 @@ export default function ReporteMensual() {
   useEffect(() => {
     localStorage.setItem("reporteMensual", JSON.stringify(datos));
   }, [datos]);
-  
-  useEffect(() => {
-    localStorage.setItem("gastoTotal", datos.length !== 0 ? datos[0].total : "0");
-    setGastoTotal(datos.length !== 0 ? datos[0].total : "0")
-  }, [])
 
-  const obtenerGastosTotal = (gasto: number) => {
-    const gastoAnterior = localStorage.getItem("gastoTotal");
-    let suma = parseInt(gastoAnterior || "") + gasto;
-    setGastoTotal(suma.toString());
-  }
+  useEffect(() => {
+    obtenerGastosTotal();
+  }, [datos]);
+
+  const obtenerGastosTotal = () => {
+    const total = datos.reduce((acc: number, obj: any) => {
+      return acc + parseFloat(obj.total)
+    }, 0);
+    setGastoTotal(total.toFixed(2).toString())
+  };
 
   return (
     <div>
