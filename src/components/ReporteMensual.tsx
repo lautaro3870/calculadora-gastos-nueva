@@ -49,13 +49,13 @@ export default function ReporteMensual() {
   columns.push({
     field: "ahorro",
     headerName: "Ahorro",
-    width: 70,
+    width: 100,
   });
 
   columns.push({
     field: "ingresos",
     headerName: "Ingresos",
-    width: 70,
+    width: 100,
   });
 
   columns.push({
@@ -209,7 +209,7 @@ export default function ReporteMensual() {
   const calcularAhorro = () => {
     datos.forEach(gasto => {
       gasto.ahorro = 1360 - gasto.total;
-      gasto.ingresos = 1360;
+      gasto.ingresos = 910;
     })
   }
 
