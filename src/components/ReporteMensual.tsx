@@ -208,7 +208,7 @@ export default function ReporteMensual() {
 
   const calcularAhorro = () => {
     datos.forEach(gasto => {
-      gasto.ahorro = 1360 - gasto.total;
+      gasto.ahorro = 910 - gasto.total;
       gasto.ingresos = 910;
     })
   }
