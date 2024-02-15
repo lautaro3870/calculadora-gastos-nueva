@@ -47,6 +47,18 @@ export default function ReporteMensual() {
   });
 
   columns.push({
+    field: "ahorro",
+    headerName: "Ahorro",
+    width: 70,
+  });
+
+  columns.push({
+    field: "ingresos",
+    headerName: "Ingresos",
+    width: 70,
+  });
+
+  columns.push({
     field: "actions",
     headerName: "Actions",
     renderCell: (params) => {
@@ -152,6 +164,7 @@ export default function ReporteMensual() {
       const sumasGastosPorCategoria = sumarGastosPorCategoria(final);
 
       const mes = key;
+      const ahorro = 1360 - sumaGastos;
       const objetoDestino: any = {
         id: Math.floor(Math.random() * 1000),
         Super: 0,
@@ -164,11 +177,15 @@ export default function ReporteMensual() {
         Boludeces: 0,
         mes: mes,
         total: sumaGastos.toFixed(1),
+        ahorro: ahorro.toFixed(1),
+        ingresos: 1360
       };
+
       for (const key in sumasGastosPorCategoria) {
         const valor = sumasGastosPorCategoria[key];
         objetoDestino[valor.categoria] += valor.valor;
       }
+
       if (listadoFinal !== null) {
         listadoFinal.push(objetoDestino);
         setDatos(listadoFinal);
@@ -178,18 +195,23 @@ export default function ReporteMensual() {
 
   useEffect(() => {
     localStorage.setItem("reporteMensual", JSON.stringify(datos));
-  }, [datos]);
-
-  useEffect(() => {
     obtenerGastosTotal();
+    calcularAhorro();
   }, [datos]);
 
   const obtenerGastosTotal = () => {
     const total = datos.reduce((acc: number, obj: any) => {
-      return acc + parseFloat(obj.total)
+      return acc + parseFloat(obj.total);
     }, 0);
-    setGastoTotal(total.toFixed(2).toString())
+    setGastoTotal(total.toFixed(2).toString());
   };
+
+  const calcularAhorro = () => {
+    datos.forEach(gasto => {
+      gasto.ahorro = 1360 - gasto.total;
+      gasto.ingresos = 1360;
+    })
+  }
 
   return (
     <div>
