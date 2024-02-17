@@ -33,7 +33,7 @@ export const ReporteMensualHook = () => {
     localStorage.getItem("gastoTotal")
   );
   const [ahorro, setAhorro] = useState(
-    localStorage.getItem("ahorro")
+    localStorage.getItem("ahorro" ?? "")
   );
 
   const columnas = getColumns();
