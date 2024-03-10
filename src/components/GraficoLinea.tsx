@@ -14,6 +14,7 @@ import {
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
 import { getLocalItems } from "../funciones/GetLocalItems";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 ChartJS.register(
   TimeScale,
@@ -27,7 +28,14 @@ ChartJS.register(
 );
 export default function GraficoLinea() {
   const [listado, setListado] = useState(getLocalItems());
-  const [datos, setDatos] = useState<{ fecha: any; valor: any }[]>([]);
+  const [datos, setDatos] = useState<
+    {
+      datos(datos: any): unknown;
+      fecha: any;
+      valor: any;
+    }[]
+  >([]);
+  const [datosTabla, setDatosTabla] = useState<object[]>([]);
 
   const [chartData, setChartData] = useState<ChartData<"line", any, string>>({
     // Set initial data here or provide data based on your requirements
@@ -74,12 +82,12 @@ export default function GraficoLinea() {
         suma = suma + objeto.gasto;
       }
       const objeto = {
+        datos: { ...objetos },
         valor: suma.toFixed(1),
         fecha: fecha,
       };
       nuevoListado.push(objeto);
       setDatos(nuevoListado);
-      console.log(suma);
     }
 
     // Genera datos de ejemplo (puedes reemplazarlo con tus propios datos)
@@ -160,20 +168,29 @@ export default function GraficoLinea() {
         text: "Gastos por Día",
       },
     },
-    // scales: {
-    //   x: {
-    //     type: "time",
-    //     time: {
-    //       unit: "day",
-    //     },
-    //     ticks: {
-    //       source: "labels",
-    //     },
-    //   },
-    //   y: {
-    //     beginAtZero: true,
-    //   },
-    // },
+    onClick: (event: any, elements: any) => {
+      if (chartData.labels) {
+        if (elements.length !== 0) {
+          const index = elements[0].index;
+          const date = chartData.labels[index];
+          datos.forEach((element) => {
+            if (element.fecha === date) {
+              // const f = [];
+              const formattedData = Object.values(element.datos).map(
+                (item: any) => ({
+                  id: item.id,
+                  gasto: item.gasto,
+                  categoria: item.categoria,
+                  fecha: item.fecha,
+                })
+              );
+              console.log(formattedData);
+              setDatosTabla(formattedData);
+            }
+          });
+        }
+      }
+    },
   };
 
   function convertirFecha(fecha: any) {
@@ -195,10 +212,21 @@ export default function GraficoLinea() {
     return fechaFormateada;
   }
 
+  const columns: GridColDef[] = [
+    { field: "gasto", headerName: "Gasto", width: 120 },
+    { field: "categoria", headerName: "Categoria", width: 140 },
+    { field: "fecha", headerName: "Fecha", width: 150 },
+  ];
+
   return (
     <div>
       <Line options={options} data={chartData} />
-      {/* <canvas id="lineChart" width="400" height="200"></canvas> */}
+      <hr />
+      <DataGrid
+        columns={columns}
+        rows={datosTabla}
+        getRowId={(row) => row.id}
+      ></DataGrid>
     </div>
   );
 }
