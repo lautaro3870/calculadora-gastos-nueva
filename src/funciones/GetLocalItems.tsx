@@ -18,3 +18,13 @@ export const getReporteMensual = () => {
     return JSON.parse(localStorage.getItem("reporteMensual") ?? "");
   }
 };
+
+export const getGastosTotales = () => {
+  let list = localStorage.getItem("gastosTotales");
+  if (list === null) {
+    return [];
+  }
+  if (list) {
+    return JSON.parse(localStorage.getItem("gastosTotales") ?? "");
+  }
+};

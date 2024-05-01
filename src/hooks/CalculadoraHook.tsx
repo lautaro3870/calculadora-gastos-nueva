@@ -28,12 +28,10 @@ export const CalculadoraHook = () => {
   const [listado, setListado] = useState(getLocalItems());
 
   const handleChange = (event: any) => {
-    console.log(event.target.value);
     setCategoria(event.target.value);
   };
 
   const handleChangeGasto = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     setGasto(event.target.value);
   };
 
@@ -58,7 +56,6 @@ export const CalculadoraHook = () => {
       fecha: obtenerFecha(),
     };
 
-    console.log(objeto);
     setListado((oldList: any[]) => [...oldList, objeto]);
     setGasto("");
   };
@@ -109,6 +106,6 @@ export const CalculadoraHook = () => {
     handleChangeTotal,
     changeEditing,
     handleChangeToFalse,
-    calcular
+    calcular,
   };
 };

@@ -9,6 +9,7 @@ import {
   sumarGastos,
   sumarGastosPorCategoria,
 } from "../funciones/ReporteMensualFun";
+import { Gasto } from "../components/Grafico";
 
 const getColumns = () => {
   let columna = {};
@@ -26,15 +27,17 @@ const getColumns = () => {
   return columns;
 };
 
+interface Datos {
+  [key: string]: number;
+}
+
 export const ReporteMensualHook = () => {
   const [listado, setListado] = useState(getLocalItems());
   const [datos, setDatos] = useState<any[]>(getReporteMensual());
   const [gastoTotal, setGastoTotal] = useState(
     localStorage.getItem("gastoTotal")
   );
-  const [ahorro, setAhorro] = useState(
-    localStorage.getItem("ahorro")
-  );
+  const [ahorro, setAhorro] = useState(localStorage.getItem("ahorro"));
 
   const columnas = getColumns();
 
@@ -121,6 +124,29 @@ export const ReporteMensualHook = () => {
     }
   };
 
+  const calcularGastosTotales = () => {
+    const sumaTotal: Datos = {
+      Super: 0,
+      Boludeces: 0,
+      Ropa: 0,
+      Bar: 0,
+      Bondi: 0,
+      Metro: 0,
+      Cafe: 0,
+      Otros: 0,
+    };
+
+    datos.forEach((objeto) => {
+      Object.keys(objeto).forEach((propiedad) => {
+        if (sumaTotal.hasOwnProperty(propiedad)) {
+          sumaTotal[propiedad] += objeto[propiedad];
+        }
+      });
+    });
+
+    localStorage.setItem("gastosTotales", JSON.stringify(sumaTotal));
+  };
+
   useEffect(() => {
     localStorage.setItem("reporteMensual", JSON.stringify(datos));
     obtenerValores("total");
@@ -128,6 +154,10 @@ export const ReporteMensualHook = () => {
     localStorage.setItem("ahorro", "");
     calcularAhorro();
   }, [datos]);
+
+  useEffect(() => {
+    calcularGastosTotales();
+  }, []);
 
   const obtenerValores = (valor: string) => {
     let resultado: number = 0;
@@ -156,6 +186,6 @@ export const ReporteMensualHook = () => {
     gastoTotal,
     columns,
     datos,
-    ahorro
+    ahorro,
   };
 };
