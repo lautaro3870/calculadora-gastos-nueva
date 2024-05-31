@@ -9,7 +9,6 @@ import {
   sumarGastos,
   sumarGastosPorCategoria,
 } from "../funciones/ReporteMensualFun";
-import { Gasto } from "../components/Grafico";
 
 const getColumns = () => {
   let columna = {};
@@ -114,7 +113,8 @@ export const ReporteMensualHook = () => {
 
       for (const key in sumasGastosPorCategoria) {
         const valor = sumasGastosPorCategoria[key];
-        objetoDestino[valor.categoria] += valor.valor;
+        const valorParseado = parseFloat(valor.valor);
+        objetoDestino[valor.categoria] += Math.round(valorParseado * 100) / 100;
       }
 
       if (listadoFinal !== null) {
