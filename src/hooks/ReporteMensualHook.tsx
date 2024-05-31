@@ -31,6 +31,7 @@ interface Datos {
 }
 
 export const ReporteMensualHook = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [listado, setListado] = useState(getLocalItems());
   const [datos, setDatos] = useState<any[]>(getReporteMensual());
   const [gastoTotal, setGastoTotal] = useState(
@@ -153,10 +154,12 @@ export const ReporteMensualHook = () => {
     obtenerValores("ahorro");
     localStorage.setItem("ahorro", "");
     calcularAhorro();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [datos]);
 
   useEffect(() => {
     calcularGastosTotales();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const obtenerValores = (valor: string) => {
