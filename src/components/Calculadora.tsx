@@ -30,6 +30,7 @@ export default function Calculadora() {
     changeEditing,
     handleChangeToFalse,
     calcular,
+    totalAllowedToExpense
   } = CalculadoraHook();
 
   const columns: GridColDef[] = [
@@ -132,7 +133,7 @@ export default function Calculadora() {
         Filtrar
       </Button>
       <label style={{ marginLeft: "10px" }}>
-        {total > totalAGastar ? (
+        {total > totalAllowedToExpense ? (
           <p style={{ color: "red" }}>{total.toFixed(1)}</p>
         ) : (
           total.toFixed(1)

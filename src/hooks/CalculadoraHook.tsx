@@ -4,6 +4,7 @@ import { SelectChangeEvent } from "@mui/material";
 import sumar from "../funciones/Sumar";
 import { GridSortModel } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
+import meses from "../Meses";
 
 export const obtenerFecha = (): string => {
   const today = new Date();
@@ -19,6 +20,7 @@ const totalGasto = localStorage.getItem("totalAGastar");
 export const CalculadoraHook = () => {
   const [total, setTotal] = useState<number>(0);
   const [totalAGastar, setTotalAGastar] = useState(parseInt(totalGasto ?? ""));
+  const [totalAllowedToExpense, setTotalAllowedToExpense] = useState<number>(0);
 
   const [editing, setIsEditing] = useState(false);
 
@@ -34,6 +36,22 @@ export const CalculadoraHook = () => {
   const handleChangeGasto = (event: ChangeEvent<HTMLInputElement>) => {
     setGasto(event.target.value);
   };
+
+  const calculateTotalExpensesAllowed = () => {
+    const date = new Date();
+    const days = meses[date.getMonth() + 1].dias;
+    const perDayExpenses = totalAGastar / days;
+    const totalAllowedToExpenseValue = perDayExpenses * date.getDate();
+    setTotalAllowedToExpense(totalAllowedToExpenseValue)
+  };
+
+  useEffect(() => {
+    calculateTotalExpensesAllowed();
+  }, []);
+
+  useEffect(() => {
+    calculateTotalExpensesAllowed();
+  }, [totalAGastar]);
 
   useEffect(() => {
     localStorage.setItem("gastos", JSON.stringify(listado));
@@ -107,5 +125,6 @@ export const CalculadoraHook = () => {
     changeEditing,
     handleChangeToFalse,
     calcular,
+    totalAllowedToExpense
   };
 };
