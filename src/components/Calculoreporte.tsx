@@ -18,21 +18,18 @@ export default function CalculoReporte() {
   ];
 
   const convertirFecha = (fecha: string) => {
-    const partes = fecha.split("-");
-    const año = partes[0];
-    const mes = partes[1];
-    const día = partes[2];
-
-    return `${mes}/${día}/${año}`;
+    const [day, month, year] = fecha.split('/').map(Number);
+    return new Date(year, month - 1, day);
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const from = fromInput.current?.value || "";
-    const to = toInput.current?.value || "";
     const items = getLocalItems();
-    let filteredItems = items.filter((i: any) => {
-      return i.fecha >= convertirFecha(from) && i.fecha <= convertirFecha(to);
+    const from = new Date(fromInput.current?.value || "");
+    const to = new Date(toInput.current?.value || "");
+    const filteredItems = items.filter((i: any) => {
+      const itemDate = convertirFecha(i.fecha);
+      return itemDate >= from && itemDate <= to;
     });
     setListado(filteredItems);
     setSubTotal(sumar(filteredItems));
