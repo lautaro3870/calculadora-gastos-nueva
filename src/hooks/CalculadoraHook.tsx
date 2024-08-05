@@ -63,6 +63,7 @@ export const CalculadoraHook = () => {
 
   useEffect(() => {
     calculateTotalExpensesAllowed();
+    calcularDiferencia();
   }, [totalAGastar]);
 
   useEffect(() => {
