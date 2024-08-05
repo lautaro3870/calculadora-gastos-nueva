@@ -30,7 +30,8 @@ export default function Calculadora() {
     changeEditing,
     handleChangeToFalse,
     calcular,
-    totalAllowedToExpense
+    totalAllowedToExpense,
+    diferencia
   } = CalculadoraHook();
 
   const columns: GridColDef[] = [
@@ -139,6 +140,7 @@ export default function Calculadora() {
           total.toFixed(1)
         )}
       </label>
+      <span style={{marginLeft: 10, color: diferencia > 0 ? '' : 'red'}}>{diferencia.toFixed(1)}</span>
       <br />
       {editing ? (
         <TextField

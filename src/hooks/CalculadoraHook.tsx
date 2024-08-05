@@ -21,6 +21,7 @@ export const CalculadoraHook = () => {
   const [total, setTotal] = useState<number>(0);
   const [totalAGastar, setTotalAGastar] = useState(parseInt(totalGasto ?? ""));
   const [totalAllowedToExpense, setTotalAllowedToExpense] = useState<number>(0);
+  const [diferencia, setDiferencia] = useState(0);
 
   const [editing, setIsEditing] = useState(false);
 
@@ -37,17 +38,28 @@ export const CalculadoraHook = () => {
     setGasto(event.target.value);
   };
 
-  const calculateTotalExpensesAllowed = () => {
+  const calculateTotalExpensesAllowed = (): number => {
     const date = new Date();
     const days = meses[date.getMonth() + 1].dias;
     const perDayExpenses = totalAGastar / days;
     const totalAllowedToExpenseValue = perDayExpenses * date.getDate();
-    setTotalAllowedToExpense(totalAllowedToExpenseValue)
+    setTotalAllowedToExpense(totalAllowedToExpenseValue);
+    return totalAllowedToExpenseValue;
+  };
+
+  const calcularDiferencia = () => {
+    const gastoPermitido = calculateTotalExpensesAllowed();
+    const diferencia = gastoPermitido - total;
+    setDiferencia(diferencia);
   };
 
   useEffect(() => {
     calculateTotalExpensesAllowed();
   }, []);
+
+  useEffect(() => {
+    calcularDiferencia();
+  }, [total]);
 
   useEffect(() => {
     calculateTotalExpensesAllowed();
@@ -56,6 +68,7 @@ export const CalculadoraHook = () => {
   useEffect(() => {
     localStorage.setItem("gastos", JSON.stringify(listado));
     const suma = sumar(listado);
+    calcularDiferencia();
     setTotal(suma);
   }, [listado]);
 
@@ -94,6 +107,7 @@ export const CalculadoraHook = () => {
       setTotalAGastar(parseInt(valor ?? ""));
       localStorage.setItem("totalAGastar", valor);
     }
+    return valor;
   };
 
   const changeEditing = () => {
@@ -125,6 +139,7 @@ export const CalculadoraHook = () => {
     changeEditing,
     handleChangeToFalse,
     calcular,
-    totalAllowedToExpense
+    totalAllowedToExpense,
+    diferencia
   };
 };
