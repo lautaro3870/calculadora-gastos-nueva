@@ -6,7 +6,6 @@ import categorias from "../Categorias";
 import {
   obtenerNombreMes,
   restoColumnas,
-  sumarGastos,
   sumarGastosPorCategoria,
 } from "../funciones/ReporteMensualFun";
 
@@ -91,11 +90,9 @@ export const ReporteMensualHook = () => {
         return acc;
       }, {});
 
-      const sumaGastos = sumarGastos(final);
       const sumasGastosPorCategoria = sumarGastosPorCategoria(final);
 
       const mes = key;
-      const ahorro = 1360 - sumaGastos;
       const objetoDestino: any = {
         id: Math.floor(Math.random() * 1000),
         Super: 0,
@@ -107,9 +104,6 @@ export const ReporteMensualHook = () => {
         Cafe: 0,
         Boludeces: 0,
         mes: mes,
-        total: sumaGastos.toFixed(1),
-        ahorro: ahorro.toFixed(1),
-        ingresos: 1360,
       };
 
       for (const key in sumasGastosPorCategoria) {
@@ -154,12 +148,10 @@ export const ReporteMensualHook = () => {
     obtenerValores("ahorro");
     localStorage.setItem("ahorro", "");
     calcularAhorro();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [datos]);
 
   useEffect(() => {
     calcularGastosTotales();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const obtenerValores = (valor: string) => {

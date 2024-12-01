@@ -17,6 +17,10 @@ export default function CalculoReporte() {
     { field: "fecha", headerName: "Fecha", width: 150 },
   ];
 
+  const normalizarFecha = (fecha: Date) => {
+    return new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
+  };
+
   const convertirFecha = (fecha: string) => {
     const [day, month, year] = fecha.split('/').map(Number);
     return new Date(year, month - 1, day);
@@ -25,8 +29,8 @@ export default function CalculoReporte() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const items = getLocalItems();
-    const from = new Date(fromInput.current?.value || "");
-    const to = new Date(toInput.current?.value || "");
+    const from = normalizarFecha(new Date(fromInput.current?.value || ""));
+    const to = normalizarFecha(new Date(toInput.current?.value || ""));
     const filteredItems = items.filter((i: any) => {
       const itemDate = convertirFecha(i.fecha);
       return itemDate >= from && itemDate <= to;

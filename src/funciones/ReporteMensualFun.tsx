@@ -63,19 +63,4 @@ export const restoColumnas: GridColDef[] = [
     headerName: "Mes",
     width: 120,
   },
-  {
-    field: "total",
-    headerName: "Total",
-    width: 100,
-  },
-  {
-    field: "ahorro",
-    headerName: "Ahorro",
-    width: 100,
-  },
-  {
-    field: "ingresos",
-    headerName: "Ingresos",
-    width: 100,
-  },
 ];

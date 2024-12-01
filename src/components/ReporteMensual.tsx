@@ -31,8 +31,6 @@ export default function ReporteMensual() {
         >
           Guardar
         </button>
-        <label>Total: {gastoTotal}</label>
-        <label>Total ahorrado: {ahorro}</label>
       </Stack>
       <Box>
         <br />
